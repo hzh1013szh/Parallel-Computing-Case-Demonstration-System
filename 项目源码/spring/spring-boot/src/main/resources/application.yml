@@ -1,0 +1,18 @@
+server:
+  port: 8080
+spring:
+    datasource:
+      url: jdbc:postgresql://192.168.74.128:26000/postgres
+      username: huangzihao
+      password: Hzh1531Szh!
+      driver-class-name: org.postgresql.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.hwk.springboot.entity
+# 分页操作，其实就是相当于在select语句后面加上limit和offset关键字
+pagehelper:
+  helper-dialect: postgresql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

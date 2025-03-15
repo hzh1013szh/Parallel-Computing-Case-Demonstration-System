@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hwk.springboot.dao.FavoriteDao">
+    <insert id="addFavorite" parameterType="com.hwk.springboot.entity.Favorite">
+        insert into favorite(userid,favoriteid) values(#{favorite.userid},#{favorite.favoriteid})
+    </insert>
+    <delete id="deleteFavorite" parameterType="com.hwk.springboot.entity.Favorite">
+        delete from favorite where userid = #{favorite.userid} and favoriteid = #{favorite.favoriteid}
+    </delete>
+    <select id="getFavoriteUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select userid from favorite where favoriteid = #{favoriteid}
+    </select>
+    <select id="getFavoritePost" parameterType="java.lang.Integer" resultType="com.hwk.springboot.entity.Favorite">
+        select favoriteid from favorite where userid = #{userid}
+    </select>
+</mapper>

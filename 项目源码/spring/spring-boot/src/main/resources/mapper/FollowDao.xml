@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hwk.springboot.dao.FollowDao">
+    <insert id="addFollow" parameterType="com.hwk.springboot.entity.Follow">
+        insert into follow(userid,followid) values(#{follow.userid},#{follow.followid})
+    </insert>
+    <!-- resultType是java中的Integer   -->
+    <select id="getMyFollow" resultType="java.lang.Integer">
+            select followid from follow where userid = #{userid}
+    </select>
+    <select id="getMyFan" resultType="java.lang.Integer">
+            select userid from follow where followid = #{followid}
+    </select>
+    <delete id="deleteFollow" parameterType="com.hwk.springboot.entity.Follow">
+        delete from follow where userid = #{follow.userid} and followid = #{follow.followid}
+    </delete>
+</mapper>

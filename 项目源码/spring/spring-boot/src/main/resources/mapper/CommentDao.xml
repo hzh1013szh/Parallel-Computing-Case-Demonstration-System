@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hwk.springboot.dao.CommentDao">
+    <insert id="addComment" parameterType="com.hwk.springboot.entity.Comment">
+        insert into comment
+        (content, postid, rootCommentId, time, toUserId, userid)
+        values
+        (#{comment.content}, #{comment.postid}, #{comment.rootCommentId}, #{comment.time}, #{comment.toUserId}, #{comment.userid})
+    </insert>
+    <select id="getRootCommentByPostid" parameterType="java.lang.Integer" resultType="com.hwk.springboot.entity.Comment">
+        select * from comment where postid = #{postid} and rootCommentId is null
+        order by time desc
+    </select>
+    <select id="getChildrenComment" resultType="com.hwk.springboot.entity.Comment">
+        select * from comment where rootCommentId = #{id}
+    </select>
+</mapper>

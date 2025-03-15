@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hwk.springboot.dao.GoodDao">
+    <insert id="addGood" parameterType="com.hwk.springboot.entity.Good">
+         insert into good(userid,goodid) values(#{good.userid},#{good.goodid})
+    </insert>
+    <select id="getGoods" resultType="java.lang.Integer">
+        select userid from good where goodid = #{goodid}
+    </select>
+    <delete id="deleteGood" parameterType="com.hwk.springboot.entity.Good">
+        delete from good where userid = #{good.userid} and goodid = #{good.goodid}
+    </delete>
+</mapper>

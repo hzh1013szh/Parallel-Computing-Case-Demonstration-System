@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hwk.springboot.dao.PostDao">
+    <insert id="addPost" parameterType="com.hwk.springboot.entity.Post">
+        insert into post(title,content,time,userid,goods,comments,favorites,status,description,img,role,username,postcategoryid)
+        values(#{post.title},#{post.content},#{post.time},
+        #{post.userid},#{post.goods},#{post.comments},
+   #{post.favorites},#{post.status},#{post.description},#{post.img},#{post.role},#{post.username},#{post.postCategoryId})
+    </insert>
+    <select id="getStaging" resultType="com.hwk.springboot.entity.Post">
+        select * from post where userid = #{userid} and status = '0'
+    </select>
+    <delete id="deleteStaging">
+        delete from post where userid = #{userid} and status = '0'
+    </delete>
+    <update id="updatePost">
+        update post set title=#{post.title},content=#{post.content},time=#{post.time},
+                        userid=#{post.userid},goods=#{post.goods},comments=#{post.comments}
+                        ,favorites=#{post.favorites},status=#{post.status},description=#{post.description},
+                         img=#{post.img},role=#{post.role},username=#{post.username},postcategoryid=#{post.postCategoryId}
+        where id = #{post.id}
+    </update>
+    <select id="getPostsByUserid" resultType="com.hwk.springboot.entity.Post">
+        select post.*,postcategory.name as postCategoryName from post left join postcategory on post.postcategoryid = postcategory.id
+        where post.userid = #{userid} and status = '1'
+        order by time desc
+    </select>
+    <select id="getPosts" resultType="com.hwk.springboot.entity.Post">
+        select post.*,postcategory.name as postCategoryName from post left join postcategory on post.postcategoryid = postcategory.id
+        <where>
+            status = '1'
+            <if test="params != null and params.role != null and params.role != ''">
+                and role = #{params.role}
+            </if>
+            <if test="params != null and params.username != null and params.username != ''">
+                and username like concat('%',#{params.username},'%')
+            </if>
+             <if test="params != null and params.title != null and params.title != ''">
+                 and title like concat('%',#{params.title},'%')
+             </if>
+            <if test="params != null and params.postCategoryId != null and params.postCategoryId != ''">
+                and postcategoryid = #{params.postCategoryId}
+            </if>
+        </where>
+        order by time desc
+    </select>
+    <select id="getPostById" resultType="com.hwk.springboot.entity.Post">
+        select post.*,postcategory.name as postCategoryName from post left join postcategory on post.postcategoryid = postcategory.id
+        where post.id = #{id}
+    </select>
+    <delete id="deletePost">
+        delete from post where id = #{id}
+    </delete>
+    <select id="getPostsByIdList" resultType="com.hwk.springboot.entity.Post">
+        <choose>
+            <when test="params != null and params.idlist != null and params.idlist.size > 0">
+                select post.*,postcategory.name as postCategoryName from post left join postcategory on post.postcategoryid = postcategory.id
+                <where>
+                    status = '1'
+                    and post.id in
+                    <foreach item="id" collection="params.idlist" open="(" close=")" separator=",">
+                        #{id}
+                    </foreach>
+                </where>
+                order by time desc
+            </when>
+            <otherwise>
+                select * from post where 1=0
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getEchartsPie" resultType="java.util.Map">
+        select postcategory.name as name,count(*) as value from post left join postcategory on post.postcategoryid = postcategory.id
+        GROUP by postcategory.name;
+    </select>
+</mapper>
